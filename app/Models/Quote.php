@@ -11,6 +11,7 @@ class Quote extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = ['quote', 'author', 'user_id'];
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
