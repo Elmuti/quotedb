@@ -17,7 +17,7 @@ class QuoteResource extends JsonResource
     {
         return [
             'quote' => $this->quote,
-            'author' => $this->user->email,
+            'author' => $this->author,
             'date' => Carbon::make($this->created_at)->format('Y-m-d')
         ];
     }
