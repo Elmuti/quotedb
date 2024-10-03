@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\QuoteResource;
 use App\Models\Quote;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class RandomQuoteController extends Controller
+class RandomIzaroController extends Controller
 {
     public function index(Request $request)
     {
-        $quote = Quote::all()->random();
+        $quote = Quote::where('user_id', 2)->first();
         return Inertia::render('Random', ['quote' => QuoteResource::make($quote)]);
     }
 }
