@@ -1,10 +1,11 @@
 ﻿<template>
-    <div class="p-8 bg-white">
+    <div class="p-8 bg-white dark:bg-gray-800">
+        <DarkModeToggle />
         <QuotesHeader @input-change="handleInputChange" />
         <div>
             <QuoteContainer :items="parsedQuotesRef" />
         </div>
-        <div class="flex justify-center items-end h-screen">
+        <div class="flex justify-center items-end h-screen text-gray-900 dark:text-gray-200">
             2023- © Ricochet Software
         </div>
     </div>
@@ -14,6 +15,7 @@
 import QuoteContainer from "@/Components/QuoteContainer.vue";
 import QuotesHeader from "@/Components/QuotesHeader.vue";
 import {ref} from "vue";
+import DarkModeToggle from "@/Components/DarkModeToggle.vue";
 const props = defineProps({
     quotes: Array
 })
