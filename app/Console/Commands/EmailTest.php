@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Mail\QuoteAdded;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -31,11 +32,11 @@ class EmailTest extends Command
     {
         $user = User::where("id", 1)->firstOrFail();
         $quote = $user->quotes()->inRandomOrder()->first();
-        $pending = Mail::to(env('MAIL_TO_ADDRESS'));
+        $pending = Mail::to(config('quotedb.mailToAddress'));
         try {
             $pending->send(new QuoteAdded(quote: $quote));
         } catch (\Exception $ex) {
-            Log:Error($ex);
+            Log::Error($ex);
         }
     }
 }
