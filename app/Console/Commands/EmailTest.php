@@ -34,7 +34,9 @@ class EmailTest extends Command
         $quote = $user->quotes()->inRandomOrder()->first();
         $pending = Mail::to(config('quotedb.mailToAddress'));
         try {
-            $pending->send(new QuoteAdded(quote: $quote));
+            $sent = $pending->send(new QuoteAdded(quote: $quote));
+            $this->info($sent->getDebug());
+            $this->info($sent->toString());
         } catch (\Exception $ex) {
             Log::Error($ex);
         }
