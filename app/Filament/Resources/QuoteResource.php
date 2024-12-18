@@ -42,11 +42,11 @@ class QuoteResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('author')->searchable(),
-                Tables\Columns\TextColumn::make('quote')->searchable(),
                 Tables\Columns\TextColumn::make('created_at'),
+                Tables\Columns\TextColumn::make('quote')->searchable(),
             ])
             ->filters([
-                //
+                //sa
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
