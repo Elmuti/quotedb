@@ -28,7 +28,7 @@ class QuoteResource extends Resource
                     ->required(),
                 Forms\Components\DateTimePicker::make('created_at')
                     ->required(),
-                Forms\Components\Select::make('user_id.name')
+                Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
                     ->label("Owner")
                     ->required(),
