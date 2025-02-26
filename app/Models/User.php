@@ -15,6 +15,8 @@ use Illuminate\Support\Str;
 class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable, SoftDeletes;
+    const ROLE_SUPER_ADMIN = 'super_admin';
+    const ROLE_ADMIN = 'admin';
 
     /**
      * The attributes that are mass assignable.
@@ -52,12 +54,18 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->isAdmin();
+        return $this->role === self::ROLE_SUPER_ADMIN || $this->role === self::ROLE_ADMIN;
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === self::ROLE_SUPER_ADMIN;
+    }
+
+    // Replace the existing isAdmin method
     public function isAdmin(): bool
     {
-        return Str::endsWith($this->email, '@elmu.dev') || $this->email === 'elmukelmuz@gmail.com';
+        return $this->role === self::ROLE_ADMIN;
     }
 
     public function quotes(): HasMany

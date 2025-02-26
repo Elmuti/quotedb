@@ -21,6 +21,11 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->isSuperAdmin();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -52,7 +57,15 @@ class UserResource extends Resource
                             ->password()
                             ->required()
                             ->visibleOn('create'),
+                        Forms\Components\Select::make('role')
+                            ->options([
+                                User::ROLE_SUPER_ADMIN => 'Super Admin',
+                                User::ROLE_ADMIN => 'Admin',
+                            ])
+                            ->required()
+                            ->visible(fn () => auth()->user()->isSuperAdmin()),
                     ]),
+                    
                 Forms\Components\Section::make()
                     ->hidden(fn (string $operation) => $operation === 'create')
                     ->columnSpan(['lg' => 1])

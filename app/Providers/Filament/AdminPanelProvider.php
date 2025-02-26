@@ -39,9 +39,14 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
                 RecentlyAddedQuotes::class,
             ])
+            ->widgets(
+                // Only show FilamentInfoWidget to super admins
+                auth()->check() && auth()->user()->isSuperAdmin() 
+                    ? [Widgets\FilamentInfoWidget::class]
+                    : []
+            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
