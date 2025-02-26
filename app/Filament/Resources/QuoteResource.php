@@ -49,12 +49,16 @@ class QuoteResource extends Resource
                 //sa
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn () => auth()->user()->isSuperAdmin()),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn () => auth()->user()->isSuperAdmin()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                ])
+                ->visible(fn () => auth()->user()->isSuperAdmin()),
             ]);
     }
 
