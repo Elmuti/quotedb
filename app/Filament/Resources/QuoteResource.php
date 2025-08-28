@@ -43,7 +43,7 @@ class QuoteResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('author')->searchable(),
                 Tables\Columns\TextColumn::make('created_at'),
-                Tables\Columns\TextColumn::make('quote')->searchable(),
+                Tables\Columns\TextColumn::make('quote')->searchable()->sortable(),
             ])
             ->filters([
                 //sa
