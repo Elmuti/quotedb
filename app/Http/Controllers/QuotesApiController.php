@@ -24,7 +24,7 @@ class QuotesApiController extends JsonResponse
     public function addQuotes(Request $request)
     {
         $validated = $request->validate([
-            'user_id' => ['required', 'integer'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
             'quote' => ['required', 'string'],
             'author' => ['required', 'string'],
             'date' => ['string'],
