@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Quote;
 use App\Models\User;
 use Illuminate\Console\Command;
 
@@ -27,7 +26,7 @@ class PrintRandomQuote extends Command
      */
     public function handle()
     {
-        $user = User::where("email", $this->option("email"))->firstOrFail();
+        $user = User::where('email', $this->option('email'))->firstOrFail();
         $quote = $user->quotes()->inRandomOrder()->first();
         $this->alert($quote->quote);
     }

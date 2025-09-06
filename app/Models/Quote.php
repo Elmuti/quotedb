@@ -12,11 +12,13 @@ class Quote extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['quote', 'author', 'user_id'];
+
     protected $casts = [
         'author' => 'string',
         'quote' => 'string',
-        'user_id' => 'integer'
+        'user_id' => 'integer',
     ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

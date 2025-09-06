@@ -3,16 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\QuoteResource\Pages;
-use App\Filament\Resources\QuoteResource\RelationManagers;
-use App\Filament\Resources\UserResource\RelationManagers\QuotesRelationManager;
 use App\Models\Quote;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class QuoteResource extends Resource
 {
@@ -30,7 +26,7 @@ class QuoteResource extends Resource
                     ->required(),
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
-                    ->label("Owner")
+                    ->label('Owner')
                     ->required(),
                 Forms\Components\MarkdownEditor::make('quote')
                     ->required(),
@@ -58,7 +54,7 @@ class QuoteResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ])
-                ->visible(fn () => auth()->user()->isSuperAdmin()),
+                    ->visible(fn () => auth()->user()->isSuperAdmin()),
             ]);
     }
 

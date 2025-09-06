@@ -12,6 +12,7 @@ class RandomIzaroController extends Controller
     public function index(Request $request)
     {
         $quote = Quote::where('user_id', 2)->inRandomOrder()->first();
+
         return Inertia::render('Random', ['quote' => QuoteResource::make($quote)]);
     }
 }
