@@ -1,5 +1,5 @@
-﻿<?php
+<?php
 
 return [
-    'mailToAddress' => env('MAIL_TO_ADDRESS')
+    'mailToAddress' => env('MAIL_TO_ADDRESS'),
 ];

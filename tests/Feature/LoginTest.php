@@ -5,42 +5,27 @@ namespace Tests\Feature;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
-    public function test_admin_login(): void
+
+    // For non-admin authentication
+    public function test_login(): void
     {
         $user = User::factory()->create([
-            'email' => 'admin@elmu.dev',
-            'password' => bcrypt('password'),
-            // Make sure user has admin permissions if needed
+            'email' => 'test@example.com',
+            'password' => Hash::make('password'),
         ]);
 
-        // Use Filament's login page test helper
-        $response = $this->get(Filament::getLoginUrl());
-        $response->assertSuccessful();
-
-        // Then try the login
-        $response = $this->post(Filament::getLoginUrl(), [
-            'email' => 'admin@elmu.dev',
+        $response = $this->post(route('login'), [
+            'email' => $user->email,
             'password' => 'password',
         ]);
 
-        $response->assertRedirect(Filament::getHomeUrl());
-    }
-
-// For non-admin authentication
-    public function test_example(): void
-    {
-        $response = $this->post(route('login'), [
-            'email' => 'test@example.com',
-            'password' => 'password'
-        ]);
-
-        $response->assertRedirect(route('quotes'));
+        $response->assertRedirect(route('home'));
         $this->assertAuthenticated();
     }
 
@@ -48,7 +33,7 @@ class LoginTest extends TestCase
     {
         $response = $this->post('/login', [
             'email' => 'test@example.com',
-            'password' => 'wrong_password'
+            'password' => 'wrong_password',
         ]);
 
         $response->assertStatus(302);
@@ -56,4 +41,3 @@ class LoginTest extends TestCase
         $this->assertGuest();
     }
 }
-

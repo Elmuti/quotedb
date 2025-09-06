@@ -43,7 +43,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->widgets(
                 // Only show FilamentInfoWidget to super admins
-                auth()->check() && auth()->user()->isSuperAdmin() 
+                auth()->check() && auth()->user()->isSuperAdmin()
                     ? [Widgets\FilamentInfoWidget::class]
                     : []
             )
