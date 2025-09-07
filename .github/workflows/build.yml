@@ -21,9 +21,6 @@ jobs:
         laravel: [11.9.*]
         dependency-version: [prefer-lowest, prefer-stable]
         os: [ubuntu-latest]
-        include:
-          - laravel: 11.*
-            testbench: 9.*
 
     steps:
       # Checkout the code
