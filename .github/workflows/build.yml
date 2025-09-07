@@ -89,3 +89,7 @@ jobs:
             ${{ steps.load_test_results.outputs.results }}
             ```
             </details>
+
+      - name: Fail workflow if tests failed
+        if: steps.tests.outcome == 'failure'
+        run: exit 1
