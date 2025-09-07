@@ -21,6 +21,12 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        User::factory()->superAdmin()->create([
+            'name' => 'Test User',
+            'email' => 'admin@example.com',
+        ]);
+
         Quote::factory()->count(10)->for($user)->create();
     }
 }

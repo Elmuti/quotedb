@@ -20,6 +20,7 @@ class RecentlyAddedQuotes extends BaseWidget
         $query = QuoteResource::getEloquentQuery()
             ->whereNull('deleted_at')
             ->orderByDesc('created_at');
+
         return $table
             ->query($query)
             ->paginated([10, 25, 50])

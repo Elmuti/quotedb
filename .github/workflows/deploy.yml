@@ -1,0 +1,71 @@
+# .github/workflows/deploy.yml
+name: Create Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [ main ]
+
+jobs:
+  release:
+    environment: Prod
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Determine Version Bump Level (major)
+        id: get_level_major
+        if: contains(github.event.pull_request.labels.*.name, 'major')
+        run: echo "level=major" >> $GITHUB_OUTPUT
+
+      - name: Determine Version Bump Level (minor)
+        id: get_level_minor
+        if: contains(github.event.pull_request.labels.*.name, 'minor')
+        run: echo "level=minor" >> $GITHUB_OUTPUT
+
+      - name: Determine Version Bump Level (patch)
+        id: get_level_patch
+        if: contains(github.event.pull_request.labels.*.name, 'patch')
+        run: echo "level=patch" >> $GITHUB_OUTPUT
+        
+      - name: Set final version bump level
+        id: get_level
+        run: |
+          if [[ ! -z "${{ steps.get_level_major.outputs.level }}" ]]; then
+            echo "level=${{ steps.get_level_major.outputs.level }}" >> $GITHUB_OUTPUT
+          elif [[ ! -z "${{ steps.get_level_minor.outputs.level }}" ]]; then
+            echo "level=${{ steps.get_level_minor.outputs.level }}" >> $GITHUB_OUTPUT
+          elif [[ ! -z "${{ steps.get_level_patch.outputs.level }}" ]]; then
+            echo "level=${{ steps.get_level_patch.outputs.level }}" >> $GITHUB_OUTPUT
+          else
+            echo "level=minor" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Push new version tag
+        if: success()
+        uses: anothrNick/github-tag-action@1.75.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: ${{ steps.get_level.outputs.level }}
+          TAG_PREFIX: v
+
+      - name: Create GitHub Release
+        if: success()
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.new_tag }}
+          release_name: Release ${{ steps.get_version.outputs.new_tag }}
+          body: |
+            New release based on PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}
+            This version has been successfully deployed to production.
+          draft: false
+          prerelease: false
