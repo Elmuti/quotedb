@@ -15,6 +15,20 @@ jobs:
     permissions:
       pull-requests: write
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: laravel
+          MYSQL_ROOT_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     strategy:
       matrix:
         php: [8.2]
@@ -68,6 +82,13 @@ jobs:
       - name: Execute tests
         id: tests
         continue-on-error: true
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          DB_DATABASE: laravel
+          DB_USERNAME: root
+          DB_PASSWORD: password
         run: php artisan test > TEST_RESULTS
 
       - name: Load test results
