@@ -58,6 +58,12 @@ jobs:
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+          composer install
+
+      - name: Set up environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
 
       - name: Execute tests
         id: tests
@@ -77,7 +83,7 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            ## PHPUnit Test Results
+            ## PHP Test Results
 
             **Matrix:** `php: ${{ matrix.php }}`, `laravel: ${{ matrix.laravel }}`, `deps: ${{ matrix.dependency-version }}`
             **Result: ${{ steps.tests.outcome == 'success' && '✅' || '❌' }} ${{ steps.tests.outcome }}**
