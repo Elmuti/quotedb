@@ -19,7 +19,7 @@ jobs:
       matrix:
         php: [8.2]
         laravel: [11.9.*]
-        dependency-version: [prefer-lowest, prefer-stable]
+        dependency-version: [prefer-stable]
         os: [ubuntu-latest]
 
     steps:
