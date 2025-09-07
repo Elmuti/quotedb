@@ -60,33 +60,33 @@ jobs:
             })
 
       # laravel tests here
-      # - uses: actions/checkout@v4
-      # - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
-      #   with:
-      #     php-version: '8.2'
-      # - name: Install Dependencies
-      #   run: |
-      #     curl -sS https://getcomposer.org/installer | php -- --version=2.7.6
-      #     sudo mv composer.phar /usr/local/bin/composer
-      #     composer install --no-interaction --prefer-dist
-      # - name: Copy .env
-      #   run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-      # - name: Start Sail
-      #   run: |
-      #     ./vendor/bin/sail up -d
-      # - name: Set Up Database
-      #   run: |
-      #     ./vendor/bin/sail artisan migrate --seed
-      # - name: Execute tests
-      #   run: |
-      #     ./vendor/bin/sail test > TEST_RESULTS
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.2'
+      - name: Install Dependencies
+        run: |
+          curl -sS https://getcomposer.org/installer | php -- --version=2.7.6
+          sudo mv composer.phar /usr/local/bin/composer
+          composer install --no-interaction --prefer-dist
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Start Sail
+        run: |
+          ./vendor/bin/sail up -d
+      - name: Set Up Database
+        run: |
+          ./vendor/bin/sail artisan migrate --seed
+      - name: Execute tests
+        run: |
+          ./vendor/bin/sail test > TEST_RESULTS
 
-      # - name: Load test results
-      #   id: load_test_results
-      #   run: |
-      #     echo "results<<EOF" >> $GITHUB_OUTPUT
-      #     cat TEST_RESULTS >> $GITHUB_OUTPUT
-      #     echo "EOF" >> $GITHUB_OUTPUT
+      - name: Load test results
+        id: load_test_results
+        run: |
+          echo "results<<EOF" >> $GITHUB_OUTPUT
+          cat TEST_RESULTS >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
       
 
       # Create a new comment with the image details
