@@ -18,7 +18,7 @@ class QuotesApiController extends JsonResponse
         ]);
         $quotes = Quote::where('user_id', '=', $id)->latest()->limit($validated['max_quotes'])->get();
 
-        return response()->json(['quotes' => '']);
+        return response()->json(['quotes' => QuoteResource::collection($quotes)]);
     }
 
     public function getRandomQuotes(Request $request, int $id): JsonResponse
