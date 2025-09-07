@@ -86,7 +86,7 @@ jobs:
           DB_DATABASE: laravel
           DB_USERNAME: root
           DB_PASSWORD: password
-        run: php artisan test > TEST_RESULTS 2>&1 || true
+        run: php artisan test > TEST_RESULTS 
 
       # Back to my shit
       - name: Load test results
