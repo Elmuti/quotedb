@@ -19,6 +19,7 @@ jobs:
       matrix:
         php: [8.2]
         laravel: [11.9.*]
+        testbench: [9.*]
         dependency-version: [prefer-stable]
         os: [ubuntu-latest]
 
@@ -46,10 +47,45 @@ jobs:
               comment_id: ${{ steps.find-comment.outputs.comment-id }}
             })
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
+          coverage: none
+
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+
+      - name: Execute tests
+        id: tests
+        continue-on-error: true
+        run: vendor/bin/phpunit > TEST_RESULTS
+
+      - name: Load test results
+        id: load_test_results
+        run: |
+          echo "results<<EOF" >> $GITHUB_OUTPUT
+          cat TEST_RESULTS >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       # Create a new comment with the image details
       - name: Create New Comment
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Test Comment Body
+            ## PHPUnit Test Results
+
+            **Matrix:** `php: ${{ matrix.php }}`, `laravel: ${{ matrix.laravel }}`, `deps: ${{ matrix.dependency-version }}`
+            **Result: ${{ steps.tests.outcome == 'success' && '✅' || '❌' }} ${{ steps.tests.outcome }}**
+
+            <details>
+            <summary>Click to see full test output</summary>
+
+            ```
+            ${{ steps.load_test_results.outputs.results }}
+            ```
+            </details>
