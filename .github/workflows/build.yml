@@ -67,9 +67,20 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
 
+      # Setup Node.js for frontend build
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
       - name: Install dependencies
         run: |
           composer install
+          npm ci
+
+      - name: Build frontend assets
+        run: npm run build
 
       - name: Set up environment
         run: |
