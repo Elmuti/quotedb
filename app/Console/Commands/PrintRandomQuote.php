@@ -28,6 +28,7 @@ class PrintRandomQuote extends Command
     {
         $user = User::where('email', $this->option('email'))->firstOrFail();
         $quote = $user->quotes()->inRandomOrder()->first();
+        $this->info($quote->quote);
         $this->alert($quote->quote);
     }
 }

@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tokens/create', function (Request $request) {
         $token = $request->user()->createToken($request->token_name);
+
         return ['token' => $token->plainTextToken];
     })->name('tokens.create');
     Route::get('/tokens', function (Request $request, #[CurrentUser] User $user) {
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     })->name('tokens.index');
     Route::delete('/tokens/{id}', function (Request $request, #[CurrentUser] User $user, int $id) {
         $user->tokens()->where('id', $id)->delete();
+
         return response()->noContent();
     })->name('tokens.destroy');
 });
