@@ -90,4 +90,26 @@ class QuotesApiTest extends TestCase
         $route = route('quotes.random.server', ['serverId' => 12345, 'max_quotes' => 5]);
         $this->get($route)->assertSuccessful()->assertJsonCount(5, 'quotes');
     }
+    public function test_add_quote_with_server_id(): void
+    {
+        $user = User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@elmu.dev',
+            'role' => 'admin',
+        ]);
+        Sanctum::actingAs($user);
+        $response = $this->post(route('quotes.store'), [
+            'user_id' => $user->id,
+            'quote' => 'this is a quote',
+            'author' => 'test tester',
+            'date' => Carbon::now()->toDateTimeString(),
+            'server_id' => 12345,
+        ]);
+        $response->assertSuccessful()->assertJsonStructure(
+            [
+                'quote' => ['quote', 'author', 'date', 'server_id'],
+            ]);
+        $this->assertTrue(Quote::whereId($response->json('quote.id'))->exists());
+        $this->assertTrue(Quote::where('server_id', 12345)->exists());
+    }
 }
