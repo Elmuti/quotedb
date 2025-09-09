@@ -52,10 +52,6 @@ class QuotesApiController extends JsonResponse
         return response()->json(['quotes' => QuoteResource::collection($quotes)]);
     }
 
-
-        return response()->json(['quotes' => QuoteResource::collection($quotes)]);
-    }
-
     public function addQuotes(Request $request)
     {
         $validated = $request->validate([
