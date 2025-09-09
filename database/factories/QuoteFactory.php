@@ -19,4 +19,13 @@ class QuoteFactory extends Factory
             'created_at' => now(),
         ];
     }
+
+    public function server(int $serverId): static
+    {
+        return $this->state(
+            fn (array $attributes): array => [
+                'server_id' => $serverId,
+            ],
+        );
+    }
 }
