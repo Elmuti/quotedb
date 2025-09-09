@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('quote');
             $table->string('author')->index();
+            $table->integer('server_id')->index()->nullable();
             $table->foreignIdFor(\App\Models\User::class); //user_id
             $table->timestamps();
             $table->softDeletes();

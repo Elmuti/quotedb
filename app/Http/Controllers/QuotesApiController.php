@@ -32,15 +32,15 @@ class QuotesApiController extends JsonResponse
         return response()->json(['quotes' => QuoteResource::collection($quotes)]);
     }
 
-    public function getQuotesByServerId(Request $request, string $serverId): JsonResponse
+    public function getQuotesByServerId(Request $request, int $serverId): JsonResponse
     {
         $validated = $request->validate([
             'max_quotes' => ['required', 'integer', 'min:1', 'max:1000'],
         ]);
-        
-        $quotes = Quote::whereHas('user', function (Builder $query) use ($serverId) {
-            $query->where('server_id', $serverId);
-        })->latest()->limit($validated['max_quotes'])->get();
+        $quotes = Quote::where('server_id', '=', $serverId)->latest()->limit($validated['max_quotes'])->get();
+
+        return response()->json(['quotes' => QuoteResource::collection($quotes)]);
+    }
 
         return response()->json(['quotes' => QuoteResource::collection($quotes)]);
     }
