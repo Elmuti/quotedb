@@ -31,7 +31,7 @@ class QuotesApiController extends JsonResponse
         return response()->json(['quotes' => QuoteResource::collection($quotes)]);
     }
 
-    public function getQuotesByServerId(Request $request, int $serverId): JsonResponse
+    public function getQuotesByServerId(Request $request, string $serverId): JsonResponse
     {
         $validated = $request->validate([
             'max_quotes' => ['required', 'integer', 'min:1', 'max:1000'],
@@ -41,7 +41,7 @@ class QuotesApiController extends JsonResponse
         return response()->json(['quotes' => QuoteResource::collection($quotes)]);
     }
 
-    public function getRandomQuotesByServerId(Request $request, int $serverId): JsonResponse
+    public function getRandomQuotesByServerId(Request $request, string $serverId): JsonResponse
     {
         $validated = $request->validate([
             'max_quotes' => ['required', 'integer', 'min:1', 'max:1000'],
@@ -58,7 +58,7 @@ class QuotesApiController extends JsonResponse
             'quote' => ['required', 'string'],
             'author' => ['required', 'string'],
             'date' => ['string'],
-            'server_id' => ['integer'],
+            'server_id' => ['string'],
         ]);
         $quote = new Quote;
         $quote->user_id = $validated['user_id'];

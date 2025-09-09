@@ -17,7 +17,7 @@ class Quote extends Model
         'author' => 'string',
         'quote' => 'string',
         'user_id' => 'integer',
-        'server_id' => 'integer',
+        'server_id' => 'string',
     ];
 
     public function user(): BelongsTo
