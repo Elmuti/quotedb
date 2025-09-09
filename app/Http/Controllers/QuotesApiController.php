@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\QuoteResource;
 use App\Models\Quote;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
