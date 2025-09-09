@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('quotes', function (Blueprint $table) {
-            $table->unsignedBigInteger('server_id')->nullable()->index()->after('author');
+            $table->unsignedBigInteger('server_id')->nullable()->index();
         });
     }
 
