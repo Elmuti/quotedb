@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('quotes', function (Blueprint $table) {
             $table->unsignedBigInteger('server_id')->nullable()->index();
+            $table->index(['server_id', 'created_at'], 'quotes_server_id_created_at_idx');
         });
     }
 
@@ -22,6 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('quotes', function (Blueprint $table) {
+            $table->dropIndex('quotes_server_id_created_at_idx');
             $table->dropIndex(['server_id']);
             $table->dropColumn('server_id');
         });
