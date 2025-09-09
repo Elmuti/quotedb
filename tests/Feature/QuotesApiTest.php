@@ -103,7 +103,7 @@ class QuotesApiTest extends TestCase
             'quote' => 'this is a quote',
             'author' => 'test tester',
             'date' => Carbon::now()->toDateTimeString(),
-            'server_id' => 12345,
+            'server_id' => '12345',
         ]);
         $response->assertSuccessful()->assertJsonStructure(
             [
