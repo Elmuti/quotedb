@@ -59,6 +59,7 @@ class QuotesApiController extends JsonResponse
             'quote' => ['required', 'string'],
             'author' => ['required', 'string'],
             'date' => ['string'],
+            'server_id' => ['integer'],
         ]);
         $quote = new Quote;
         $quote->user_id = $validated['user_id'];
@@ -69,6 +70,9 @@ class QuotesApiController extends JsonResponse
             $quote->created_at = $carbonDate;
         } else {
             $quote->created_at = Carbon::now();
+        }
+        if ($request->has('server_id')) {
+            $quote->server_id = $validated['server_id'];
         }
         $quote->save();
 
