@@ -52,6 +52,20 @@ class QuotesApiTest extends TestCase
         $this->get($route)->assertSuccessful()->assertJsonCount(5, 'quotes');
     }
 
+    public function test_get_quotes_by_server(): void
+    {
+        $user = User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@elmu.dev',
+            'role' => 'admin',
+            'server_id' => 12345,
+        ]);
+        Sanctum::actingAs($user);
+        $quotes = Quote::factory()->for($user)->count(5)->create();
+        $route = route('quotes.search.server', ['server_id' => $user->server_id, 'max_quotes' => 5]);
+        $this->get($route)->assertSuccessful()->assertJsonCount(5, 'quotes');
+    }
+
     public function test_get_random_quotes(): void
     {
         $user = User::factory()->create([
