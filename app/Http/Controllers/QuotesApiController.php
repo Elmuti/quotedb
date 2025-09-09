@@ -58,7 +58,7 @@ class QuotesApiController extends JsonResponse
             'quote' => ['required', 'string'],
             'author' => ['required', 'string'],
             'date' => ['string'],
-            'server_id' => ['string'],
+            'server_id' => ['nullable', 'string', 'regex:/^\d+$/'],
         ]);
         $quote = new Quote;
         $quote->user_id = $validated['user_id'];
