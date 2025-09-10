@@ -14,7 +14,7 @@ class Server extends Model
     protected $fillable = ['server_id', 'name'];
 
     protected $casts = [
-        'server_id' => 'integer',
+        'server_id' => 'string', /** cast to string to prevent 32-bit integer overflow */
         'name' => 'string',
     ];
 
@@ -25,6 +25,6 @@ class Server extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'user_servers');
     }
 }
