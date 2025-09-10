@@ -24,6 +24,7 @@ class QuoteResource extends JsonResource
             'quote' => $this->quote,
             'author' => $this->author,
             'date' => Carbon::make($this->created_at)->format('Y-m-d'),
+            'server_id' => $this->whenNotNull($this->server_id),
         ];
     }
 }
