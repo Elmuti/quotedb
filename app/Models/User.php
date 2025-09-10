@@ -73,4 +73,9 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(Quote::class);
     }
+
+    public function servers(): BelongsToMany
+    {
+        return $this->belongsToMany(Server::class, 'user_servers');
+    }
 }

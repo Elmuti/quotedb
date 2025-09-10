@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Quote;
+use App\Models\Server;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -90,6 +91,7 @@ class QuotesApiTest extends TestCase
         $route = route('quotes.random.server', ['serverId' => 12345, 'max_quotes' => 5]);
         $this->get($route)->assertSuccessful()->assertJsonCount(5, 'quotes');
     }
+
     public function test_add_quote_with_server_id(): void
     {
         $user = User::factory()->create([
@@ -103,13 +105,32 @@ class QuotesApiTest extends TestCase
             'quote' => 'this is a quote',
             'author' => 'test tester',
             'date' => Carbon::now()->toDateTimeString(),
-            'server_id' => '12345',
+            'server' => [
+                'id' => '12345',
+                'name' => 'Test Server',
+            ],
         ]);
         $response->assertSuccessful()->assertJsonStructure(
             [
                 'quote' => ['quote', 'author', 'date', 'server_id'],
             ]);
-        $this->assertTrue(Quote::whereId($response->json('quote.id'))->exists());
-        $this->assertTrue(Quote::where('server_id', 12345)->exists());
+        $quote = Quote::find($response->json('quote.id'));
+        $this->assertNotNull($quote);
+        $this->assertEquals(12345, $quote->server->server_id);
+        // Check that a server record was created with the correct external server_id
+        $this->assertTrue(Server::where('server_id', '12345')->exists());
+        $response2 = $this->post(route('quotes.store'), [
+            'user_id' => $user->id,
+            'quote' => 'this is a 2nd quote',
+            'author' => 'test tester 2',
+            'date' => Carbon::now()->toDateTimeString(),
+            'server' => [
+                'id' => '12346',
+                'name' => 'Test Server',
+            ],
+        ]);
+        $quote = Quote::find($response2->json('quote.id'));
+        $this->assertNotNull($quote);
+        $this->assertEquals(12346, $quote->server->server_id);
     }
 }

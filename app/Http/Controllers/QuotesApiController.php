@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\QuoteResource;
 use App\Models\Quote;
+use App\Models\Server;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -58,7 +59,9 @@ class QuotesApiController extends JsonResponse
             'quote' => ['required', 'string'],
             'author' => ['required', 'string'],
             'date' => ['string'],
-            'server_id' => ['nullable', 'string', 'regex:/^\d+$/'],
+            'server' => ['nullable', 'array'],
+            'server.id' => ['required_with:server', 'string'],
+            'server.name' => ['required_with:server', 'string'],
         ]);
         $quote = new Quote;
         $quote->user_id = $validated['user_id'];
@@ -70,8 +73,12 @@ class QuotesApiController extends JsonResponse
         } else {
             $quote->created_at = Carbon::now();
         }
-        if ($request->has('server_id')) {
-            $quote->server_id = $validated['server_id'];
+        if ($request->has('server')) {
+            $server = Server::firstOrCreate(
+                ['server_id' => $validated['server']['id']],
+                ['name' => $validated['server']['name']]
+            );
+            $quote->server_id = $server->id;
         }
         $quote->save();
 
