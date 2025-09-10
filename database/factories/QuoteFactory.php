@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Quote;
+use App\Models\Server;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,11 +21,11 @@ class QuoteFactory extends Factory
         ];
     }
 
-    public function server(int $serverId): static
+    public function server(Server $server): static
     {
         return $this->state(
             fn (array $attributes): array => [
-                'server_id' => $serverId,
+                'server_id' => $server->id,
             ],
         );
     }

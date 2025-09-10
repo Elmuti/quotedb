@@ -60,9 +60,13 @@ class QuotesApiTest extends TestCase
             'email' => 'test@elmu.dev',
             'role' => 'admin',
         ]);
+        $server = Server::factory()->create([
+            'server_id' => 12345,
+            'name' => 'Test Server',
+        ]);
         Sanctum::actingAs($user);
-        $quotes = Quote::factory()->for($user)->server(12345)->count(5)->create();
-        $route = route('quotes.search.server', ['serverId' => 12345, 'max_quotes' => 5]);
+        $quotes = Quote::factory()->for($user)->server($server)->count(5)->create();
+        $route = route('quotes.search.server', ['serverId' => $server->server_id, 'max_quotes' => 5]);
         $this->get($route)->assertSuccessful()->assertJsonCount(5, 'quotes');
     }
 
@@ -86,9 +90,13 @@ class QuotesApiTest extends TestCase
             'email' => 'test@elmu.dev',
             'role' => 'admin',
         ]);
+        $server = Server::factory()->create([
+            'server_id' => 12345,
+            'name' => 'Test Server',
+        ]);
         Sanctum::actingAs($user);
-        $quotes = Quote::factory()->for($user)->server(12345)->count(5)->create();
-        $route = route('quotes.random.server', ['serverId' => 12345, 'max_quotes' => 5]);
+        $quotes = Quote::factory()->for($user)->server($server)->count(5)->create();
+        $route = route('quotes.random.server', ['serverId' => $server->server_id, 'max_quotes' => 5]);
         $this->get($route)->assertSuccessful()->assertJsonCount(5, 'quotes');
     }
 

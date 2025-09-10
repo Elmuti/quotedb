@@ -37,7 +37,9 @@ class QuotesApiController extends JsonResponse
         $validated = $request->validate([
             'max_quotes' => ['required', 'integer', 'min:1', 'max:1000'],
         ]);
-        $quotes = Quote::where('server_id', '=', $serverId)->latest()->limit($validated['max_quotes'])->get();
+        $quotes = Quote::whereHas('server',
+            fn ($query) => $query->where('server_id', '=', $serverId)
+        )->latest()->limit($validated['max_quotes'])->get();
 
         return response()->json(['quotes' => QuoteResource::collection($quotes)]);
     }
@@ -47,7 +49,9 @@ class QuotesApiController extends JsonResponse
         $validated = $request->validate([
             'max_quotes' => ['required', 'integer', 'min:1', 'max:1000'],
         ]);
-        $quotes = Quote::where('server_id', '=', $serverId)->inRandomOrder()->limit($validated['max_quotes'])->get();
+        $quotes = Quote::whereHas('server',
+            fn ($query) => $query->where('server_id', '=', $serverId)
+        )->inRandomOrder()->limit($validated['max_quotes'])->get();
 
         return response()->json(['quotes' => QuoteResource::collection($quotes)]);
     }
