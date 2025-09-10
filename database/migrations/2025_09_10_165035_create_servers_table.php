@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('servers', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->unsignedBigInteger('server_id')->unique()->index();
+            $table->unsignedBigInteger('server_id')->unique();
             $table->string('name');
         });
         Schema::create('user_servers', function (Blueprint $table) {
