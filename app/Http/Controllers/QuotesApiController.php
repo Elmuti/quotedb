@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class QuotesApiController extends JsonResponse
+class QuotesApiController extends Controller
 {
     public function getQuotes(Request $request, int $id): JsonResponse
     {
