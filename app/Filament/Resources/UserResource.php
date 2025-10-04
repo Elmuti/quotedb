@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\UserRole;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers\QuotesRelationManager;
 use App\Models\User;
@@ -56,8 +57,8 @@ class UserResource extends Resource
                             ->visibleOn('create'),
                         Forms\Components\Select::make('role')
                             ->options([
-                                User::ROLE_SUPER_ADMIN => 'Super Admin',
-                                User::ROLE_ADMIN => 'Admin',
+                                UserRole::SUPER_ADMIN->value => 'Super Admin',
+                                UserRole::ADMIN->value => 'Admin',
                             ])
                             ->required()
                             ->visible(fn () => auth()->user()->isSuperAdmin()),
