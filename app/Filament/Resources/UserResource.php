@@ -57,8 +57,8 @@ class UserResource extends Resource
                             ->visibleOn('create'),
                         Forms\Components\Select::make('role')
                             ->options([
-                                User::$role => UserRole::SUPER_ADMIN,
-                                User::$role => UserRole::ADMIN,
+                                UserRole::SUPER_ADMIN->value => 'Super Admin',
+                                UserRole::ADMIN->value => 'Admin',
                             ])
                             ->required()
                             ->visible(fn () => auth()->user()->isSuperAdmin()),
