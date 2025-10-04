@@ -8,6 +8,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -72,5 +73,10 @@ class User extends Authenticatable implements FilamentUser
     public function quotes(): HasMany
     {
         return $this->hasMany(Quote::class);
+    }
+
+    public function servers(): BelongsToMany
+    {
+        return $this->belongsToMany(Server::class, 'user_servers');
     }
 }

@@ -13,6 +13,8 @@ Route::get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::get('quotes/search/user/{id}', [QuotesApiController::class, 'getQuotes'])->name('quotes.search.user');
     Route::get('quotes/random/user/{id}', [QuotesApiController::class, 'getRandomQuotes'])->name('quotes.random.user');
+    Route::get('quotes/search/server/{serverId}', [QuotesApiController::class, 'getQuotesByServerId'])->name('quotes.search.server');
+    Route::get('quotes/random/server/{serverId}', [QuotesApiController::class, 'getRandomQuotesByServerId'])->name('quotes.random.server');
     Route::post('quotes', [QuotesApiController::class, 'addQuotes'])->name('quotes.store');
 });
 
