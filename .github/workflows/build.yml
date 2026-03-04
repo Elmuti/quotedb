@@ -109,7 +109,7 @@ jobs:
 
       # Create a new comment with the image details
       - name: Create New Comment
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@v5
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
