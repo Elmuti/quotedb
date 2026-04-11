@@ -28,7 +28,9 @@ class QuotesApiController extends JsonResponse
         ]);
         $quotes = Quote::where('user_id', '=', $id)->inRandomOrder()->limit($validated['max_quotes'])->get();
 
-        return response()->json(['quotes' => QuoteResource::collection($quotes)]);
+        return response()->json(['quotes' => QuoteResource::collection($quotes)])
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, private')
+            ->header('Pragma', 'no-cache');
     }
 
     public function addQuotes(Request $request)
