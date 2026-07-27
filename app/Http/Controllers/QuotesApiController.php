@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\QuoteResource;
 use App\Models\Quote;
+use App\Models\Server;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class QuotesApiController extends JsonResponse
+class QuotesApiController extends Controller
 {
     public function getQuotes(Request $request, int $id): JsonResponse
     {
@@ -31,6 +32,30 @@ class QuotesApiController extends JsonResponse
         return response()->json(['quotes' => QuoteResource::collection($quotes)]);
     }
 
+    public function getQuotesByServerId(Request $request, string $serverId): JsonResponse
+    {
+        $validated = $request->validate([
+            'max_quotes' => ['required', 'integer', 'min:1', 'max:1000'],
+        ]);
+        $quotes = Quote::whereHas('server',
+            fn ($query) => $query->where('server_id', '=', $serverId)
+        )->latest()->limit($validated['max_quotes'])->get();
+
+        return response()->json(['quotes' => QuoteResource::collection($quotes)]);
+    }
+
+    public function getRandomQuotesByServerId(Request $request, string $serverId): JsonResponse
+    {
+        $validated = $request->validate([
+            'max_quotes' => ['required', 'integer', 'min:1', 'max:1000'],
+        ]);
+        $quotes = Quote::whereHas('server',
+            fn ($query) => $query->where('server_id', '=', $serverId)
+        )->inRandomOrder()->limit($validated['max_quotes'])->get();
+
+        return response()->json(['quotes' => QuoteResource::collection($quotes)]);
+    }
+
     public function addQuotes(Request $request)
     {
         $validated = $request->validate([
@@ -38,6 +63,9 @@ class QuotesApiController extends JsonResponse
             'quote' => ['required', 'string'],
             'author' => ['required', 'string'],
             'date' => ['string'],
+            'server' => ['nullable', 'array'],
+            'server.id' => ['required_with:server', 'string'],
+            'server.name' => ['required_with:server', 'string'],
         ]);
         $quote = new Quote;
         $quote->user_id = $validated['user_id'];
@@ -48,6 +76,13 @@ class QuotesApiController extends JsonResponse
             $quote->created_at = $carbonDate;
         } else {
             $quote->created_at = Carbon::now();
+        }
+        if ($request->has('server')) {
+            $server = Server::firstOrCreate(
+                ['server_id' => $validated['server']['id']],
+                ['name' => $validated['server']['name']]
+            );
+            $quote->server_id = $server->id;
         }
         $quote->save();
 
