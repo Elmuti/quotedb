@@ -1,3 +1,14 @@
+# QuoteDB v1 — Deprecated
+
+> [!WARNING]
+> This repository is deprecated and no longer maintained. QuoteDB v1 has been replaced by
+> **[QuoteDB v2](https://github.com/RicochetSoftware/quotedb-v2)**.
+>
+> Use the new repository for development, installation instructions, issues, and contributions.
+> This repository is archived and retained for historical reference only.
+
+---
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
