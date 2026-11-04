@@ -35,7 +35,7 @@ php artisan migrate
 ./vendor/bin/sail artisan migrate
 ```
 
-CI (`.github/workflows/build.yml`) runs PHP 8.2, MySQL 8.0, Node 18. Tests run against a MySQL service container.
+CI (`.github/workflows/build.yml`) runs PHP 8.3 (>= 8.3.36), MySQL 8.0, Node 18. Tests run against a MySQL service container.
 
 ## Architecture
 
